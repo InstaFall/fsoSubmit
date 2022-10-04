@@ -1,0 +1,24 @@
+title 0.4 New Note
+
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over Server: 
+server adds new note to the array
+after getting the data from browser
+end note
+Server-->Browser: Server response 302: URL Redirect
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+Server-->Browser: Server response 200: HTML-code
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server-->Browser: Server response 200: main.css
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+Server-->Browser: Server response 200: main.js
+note over Browser:
+browser starts executing the js-code 
+to fetch the JSON data from server
+end note
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server-->Browser: [{content: "HTML is easy", date: "2019-05-23T17:30:31.098Z"},…]
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+Server-->Browser: Server response 200: favicon.ico
+note over Browser: Browser renders the page again
+end note
