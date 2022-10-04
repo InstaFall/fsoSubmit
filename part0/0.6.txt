@@ -1,0 +1,10 @@
+title 0.6 New note
+
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note left of  Browser:
+after the input, browser adds the new note to the 
+list and executes a js-code which sends the data to 
+the server in JSON format but does not cause a URL 
+Redirect by the server
+end note
+Server-->Browser: Server response 201
