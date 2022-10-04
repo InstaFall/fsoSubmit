@@ -1,0 +1,19 @@
+title 0.5 Single Page App
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+Server-->Browser: Server response 200: HTML-code
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server-->Browser: Server response 200: main.css
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+Server-->Browser: Server response 200: spa.js
+note over Browser:
+browser starts executing the js-code 
+and fetches the JSON data from server
+end note
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server-->Browser: [{content: "HTML is easy", date: "2019-05-23T17:30:31.098Z"},…]
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+Server-->Browser: Server response 200: favicon.ico
+note over Browser:
+browser displays the page with the notes
+end note
