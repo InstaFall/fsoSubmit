@@ -38,7 +38,7 @@ const App = () => {
       <button onClick={() => setSelected(rand(anecdotes.length))}>next anecdote</button>
       <h1>Most upvoted anecdote</h1>
       {anecdotes[getMax()]}<br />
-      has {Math.max(...points)}
+      has {Math.max(...points)} votes
     </div>
   )
 }
