@@ -16,14 +16,20 @@ const Header = ({ h, text }) => {
   }
 }
 
-//StatisticLine component
+//StatisticLine component returns a <tr> row element
 const StatisticLine = ({ text, value }) => {
-  return (
-    <div>
-      {text} {value}
-    </div>
+  if (text == "positive") return (
+    <tr>
+      <th scope="row">{text}</th>
+      <td>{value.toFixed(2)} %</td>
+    </tr>
   )
-
+  return (
+    <tr>
+      <th scope="row">{text}</th>
+      <td>{value}</td>
+    </tr>
+  )
 }
 
 //Statistics component
@@ -33,13 +39,15 @@ const Statistics = ({ good, neutral, bad }) => {
   if (sum == 0) return <>No feedback given. Use the buttons to give feedback.</>
 
   return (
-    <>
-      <StatisticLine text="good" value={good} />
-      <StatisticLine text="neutral" value={neutral} />
-      <StatisticLine text="bad" value={bad} />
-      <StatisticLine text="average" value={sum / 3} />
-      <StatisticLine text="positive" value={(good / sum) * 100} />
-    </>
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="average" value={(sum / 3).toFixed(2)} />
+        <StatisticLine text="positive" value={(good / sum) * 100} />
+      </tbody>
+    </table>
   )
 }
 
