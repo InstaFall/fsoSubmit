@@ -18,6 +18,9 @@ const Header = ({ h, text }) => {
 
 const Statistics = ({ good, neutral, bad }) => {
   const sum = good + neutral + bad
+
+  if (sum == 0) return <>No feedback given. Use the buttons to give feedback.</>
+
   return (
     <>
       good {good}<br />
