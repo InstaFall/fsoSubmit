@@ -22,6 +22,14 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const avg = (array) => {
+    let sum = 0
+    for (const member of array) {
+      sum += member;
+    }
+    return (sum / array.length)
+  }
+
   return (
     <div>
       <Header h='h1' text='give feedback' />
@@ -31,7 +39,9 @@ const App = () => {
       <Header h='h2' text='statistics' />
       good {good}<br />
       neutral {neutral}<br />
-      bad {bad}
+      bad {bad}<br />
+      average {avg(Array(good, neutral, bad))}<br />
+      positive {(good / (good + neutral + bad)) * 100} %
     </div>
   )
 }
