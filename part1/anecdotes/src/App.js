@@ -23,14 +23,22 @@ const App = () => {
     copy[selected] += 1
     setPoints(copy)
   }
-
+  const getMax = () => {
+    for (let i = 0; i < points.length; i++) {
+      if (points[i] == Math.max(...points)) return i
+    }
+  }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}<br />
       has {points[selected]} votes<br />
       <button onClick={vote}>vote</button>
       <button onClick={() => setSelected(rand(anecdotes.length))}>next anecdote</button>
+      <h1>Most upvoted anecdote</h1>
+      {anecdotes[getMax()]}<br />
+      has {Math.max(...points)}
     </div>
   )
 }
