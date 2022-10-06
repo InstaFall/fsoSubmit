@@ -14,21 +14,26 @@ const Header = ({ h, text }) => {
     case `h6`: return (<h6>{text}</h6>)
     default: return (<h1>Title</h1>)
   }
-
 }
+
+const Statistics = ({ good, neutral, bad }) => {
+  const sum = good + neutral + bad
+  return (
+    <>
+      good {good}<br />
+      neutral {neutral}<br />
+      bad {bad}<br />
+      average {sum / 3}<br />
+      positive {(good / sum) * 100} %
+    </>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  const avg = (array) => {
-    let sum = 0
-    for (const member of array) {
-      sum += member;
-    }
-    return (sum / array.length)
-  }
 
   return (
     <div>
@@ -37,11 +42,7 @@ const App = () => {
       <Button onClick={() => setNeutral(neutral + 1)} text='neutral' />
       <Button onClick={() => setBad(bad + 1)} text='bad' />
       <Header h='h2' text='statistics' />
-      good {good}<br />
-      neutral {neutral}<br />
-      bad {bad}<br />
-      average {avg(Array(good, neutral, bad))}<br />
-      positive {(good / (good + neutral + bad)) * 100} %
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
