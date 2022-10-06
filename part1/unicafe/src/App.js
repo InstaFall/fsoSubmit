@@ -16,6 +16,17 @@ const Header = ({ h, text }) => {
   }
 }
 
+//StatisticLine component
+const StatisticLine = ({ text, value }) => {
+  return (
+    <div>
+      {text} {value}
+    </div>
+  )
+
+}
+
+//Statistics component
 const Statistics = ({ good, neutral, bad }) => {
   const sum = good + neutral + bad
 
@@ -23,11 +34,11 @@ const Statistics = ({ good, neutral, bad }) => {
 
   return (
     <>
-      good {good}<br />
-      neutral {neutral}<br />
-      bad {bad}<br />
-      average {sum / 3}<br />
-      positive {(good / sum) * 100} %
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="average" value={sum / 3} />
+      <StatisticLine text="positive" value={(good / sum) * 100} />
     </>
   )
 }
