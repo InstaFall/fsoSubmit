@@ -15,7 +15,6 @@ const Course = ({ course }) => {
       <Content parts={course.parts} />
       <Sum parts={course.parts} />
     </div>
-
   )
 }
 
