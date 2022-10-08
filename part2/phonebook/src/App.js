@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Person from './components/Person'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -12,59 +15,18 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
 
-  const handleInputName = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const handleInputNumber = (event) => {
-    setNewNumber(event.target.value)
-  }
-
-  const handleFilter = (event) => {
-    setFilter(event.target.value)
-  }
-
   const peopleToDisplay = (newFilter !== '') ? persons.filter((el) => (el.name.toLowerCase().includes(newFilter.toLowerCase()))) : persons
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    if (persons.some(e => e.name === newName)) {
-      alert(`${newName} is already in the phonebook!`)
-      setNewName('')
-      setNewNumber('')
-      document.querySelector('input').focus()
-    }
-
-    else {
-      const newPerson = {
-        name: newName,
-        number: newNumber
-      }
-      setNewName('')
-      setNewNumber('')
-      setPersons(persons.concat(newPerson))
-    }
-  }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter <input type="text" value={newFilter} onChange={handleFilter} /></div>
+      <Filter setFilter={setFilter} newFilter={newFilter} />
       <h2>Add new entry</h2>
-      <form>
-        <div>
-          name: <input type="text" value={newName} onChange={handleInputName} />
-        </div>
-        <div>
-          number: <input type="tel" value={newNumber} onChange={handleInputNumber} />
-        </div>
-        <div>
-          <button type="submit" onClick={handleSubmit}>add</button>
-        </div>
-      </form>
+      <PersonForm newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber}
+        persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
       <ul>
-        {peopleToDisplay.map((el) => <li key={el.name}>{el.name} {el.number}</li>)}
+        {peopleToDisplay.map(el => <Person key={el.id} name={el.name} number={el.number} />)}
       </ul>
     </div>
   )
