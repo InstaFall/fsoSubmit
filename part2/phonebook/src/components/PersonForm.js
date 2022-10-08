@@ -1,32 +1,5 @@
 const PersonForm = (props) => {
-    const { newName, newNumber, setNewName, setNewNumber, persons, setPersons } = props
-
-    const handleInputName = (event) => {
-        setNewName(event.target.value)
-    }
-
-    const handleInputNumber = (event) => {
-        setNewNumber(event.target.value)
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        if (persons.some(e => e.name.toLowerCase() === newName.toLowerCase())) {
-            alert(`${newName} is already in the phonebook!`)
-            setNewName('')
-            setNewNumber('')
-            document.querySelector('input[name="name"]').focus()
-        } else {
-            const newPerson = {
-                name: newName,
-                number: newNumber,
-                id: persons.length + 1
-            }
-            setNewName('')
-            setNewNumber('')
-            setPersons(persons.concat(newPerson))
-        }
-    }
+    const { newName, newNumber, handleInputName, handleInputNumber, handleSubmit } = props
 
     return (
         <form>

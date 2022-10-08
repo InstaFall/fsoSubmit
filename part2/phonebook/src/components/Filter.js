@@ -1,10 +1,6 @@
 const Filter = (props) => {
 
-  const { setFilter, newFilter } = props
-
-  const handleFilter = (event) => {
-    setFilter(event.target.value)
-  }
+  const { handleFilter, newFilter } = props
 
   return (
     <div>
