@@ -1,4 +1,4 @@
-import { useState , useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
@@ -34,22 +34,26 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       setPersons(persons.concat(newPerson))
+      axios
+        .post("http://localhost:3001/persons", newPerson)
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
     }
   }
 
   const handleFilter = (event) => {
     setFilter(event.target.value)
   }
-  
+
   useEffect(() => {
     axios
-    .get("http://localhost:3001/persons")
-    .then(response => {
-      console.log("GET successful!", response.data)
-      setPersons(response.data)
-    })
+      .get("http://localhost:3001/persons")
+      .then(response => {
+        console.log("GET successful!", response.data)
+        setPersons(response.data)
+      })
   },
-  [])
+    [])
 
   const peopleToDisplay = (newFilter !== '') ? persons.filter((el) => (el.name.toLowerCase().includes(newFilter.toLowerCase()))) : persons
 
@@ -63,7 +67,7 @@ const App = () => {
         handleSubmit={handleSubmit} />
 
       <h2>Numbers</h2>
-      <Persons peopleToDisplay={peopleToDisplay} />
+      <Persons peopleToDisplay={peopleToDisplay} persons={persons} setPersons={setPersons} />
     </div>
   )
 }
