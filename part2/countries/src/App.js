@@ -1,14 +1,11 @@
-import { useState, useEffect } from 'react'
+import { React, useState, useEffect, createRef } from 'react'
 import Search from './components/Search'
 import Countries from './components/Countries'
 import axios from 'axios'
 
 const App = () => {
-  //const [tooMany, setTooMany] = useState(true)
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
-  let countryCount = 0
-
 
   //Fetch countries with useEffect
   useEffect(() => {
@@ -20,27 +17,20 @@ const App = () => {
       .catch(err => console.log(err))
   }, [])
 
-  //Filter the countries  
-
-
-  if (countries.length > 0) {
-
-    const renderedCountries = (filter !== '') ? countries.filter((el) => el.name.common.toLowerCase().includes(filter.toLowerCase())) : countries
-    countryCount = renderedCountries.length
-
+  // Wait for fetch
+  if (countries.length > 0)
     return (
       <div>
-        <Search countryCount={countryCount} setFilter={setFilter} />
-        <Countries countryCount={countryCount} renderedCountries={renderedCountries} />
+        <Search countries={countries} setFilter={setFilter} />
+        <Countries filter={filter} setFilter={setFilter} countries={countries} />
       </div>
     )
-  } else {
-    return (
-      <div>
-        <p>Fetching countries...</p>
-      </div>
-    )
-  }
+
+  return (
+    <div>
+      <p>Fetching countries...</p>
+    </div>
+  )
 }
 
 export default App

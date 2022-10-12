@@ -1,22 +1,15 @@
+import React from "react"
+
 const Search = (props) => {
-    const { setFilter, countryCount } = props
+    const { setFilter } = props
     const handleSearch = (event) => {
         setFilter(event.target.value)
     }
-
-    const tooMany = () => {
-        return (countryCount > 10) ? true : false
-    }
-
-    return tooMany() ?
+    return (
         <>
-            find country <input autoFocus type="text" placeholder="Search for a country" onChange={handleSearch} />
-            <p>Too many matches, specify filter</p>
+            find country <input autoFocus id="searchFilter" type="text" placeholder="Search for a country" onChange={handleSearch} />
         </>
-        :
-        <>
-            find country <input autoFocus type="text" placeholder="Search for a country" onChange={handleSearch} />
-        </>
+    )
 }
 
 export default Search

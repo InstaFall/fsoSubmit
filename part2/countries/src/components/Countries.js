@@ -1,20 +1,19 @@
 const CountryList = (props) => {
-    const { data } = props
+    const { data, showOnClick } = props
+
     return (
         <li>
-            {data.name.common}
+            {data.name.common} <button className={data.name.common} onClick={showOnClick}>show</button>
         </li>
     )
 }
 
 const Country = (props) => {
-    const { data } = props
-    console.log(data.languages)
+    const { data, goBackOnClick, showFlag } = props
     const languages = []
     for (const prop in data.languages) {
         languages.push(data.languages[prop])
     }
-
     return (
         <>
             <h2>{data.name.common}</h2>
@@ -28,26 +27,47 @@ const Country = (props) => {
                     <li key={i}>{el}</li>)}
             </ul>
             <img src={data.flags.svg} height="90px" width="150px" />
+            <div>
+                <button className={data.name.common} onClick={goBackOnClick} showflag={showFlag.toString()}>go back</button>
+            </div>
         </>
     )
 }
 
 const Countries = (props) => {
-    const { renderedCountries, countryCount } = props
+    const { countries, filter, setFilter } = props
+    let countriesToDisplay = countries.filter((el) => el.name.common.toLowerCase().includes(filter.toLowerCase()))
 
-    if (countryCount < 10 && countryCount != 1) {
-        return (
-            <ul>
-                {renderedCountries.map((el, index) =>
-                    <CountryList key={index} data={el} />
-                )}
-            </ul>)
+    // A flag if user clicked show button
+    let showFlag = false
+    const userInput = document.getElementById("searchFilter")
+
+    const showOnClick = (event) => {
+        const newCountry = []
+        newCountry.push(countries.find((e) => e.name.common.toLowerCase() == event.target.getAttribute("class").toLowerCase()))
+        setFilter(newCountry[0].name.common)
     }
-    else if (countryCount == 1) {
+
+    const goBackOnClick = (event) => {
+        userInput.focus()
+        if (event.target.getAttribute("showflag")) setFilter(userInput.value.slice(0, -1))
+        else setFilter(userInput.value)
+    }
+
+    if (countriesToDisplay.length > 10) return <p>Too many matches, specify filter</p>
+
+    else if (countriesToDisplay.length == 1) {
+        if (filter == countriesToDisplay[0].name.common) showFlag = true
         return (
-            <Country data={renderedCountries[0]} />
+            <Country data={countriesToDisplay[0]} goBackOnClick={goBackOnClick} showFlag={showFlag} />
         )
     }
+    else return (
+        <ul>
+            {countriesToDisplay.map((el, index) =>
+                <CountryList key={index} data={el} showOnClick={showOnClick} />
+            )}
+        </ul>)
 }
 
 export default Countries
