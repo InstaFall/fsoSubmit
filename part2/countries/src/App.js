@@ -7,6 +7,8 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
 
+  const api_key = process.env.REACT_APP_API_KEY
+
   //Fetch countries with useEffect
   useEffect(() => {
     axios.get("https://restcountries.com/v3.1/all")
@@ -22,7 +24,7 @@ const App = () => {
     return (
       <div>
         <Search countries={countries} setFilter={setFilter} />
-        <Countries filter={filter} setFilter={setFilter} countries={countries} />
+        <Countries api_key={api_key} filter={filter} setFilter={setFilter} countries={countries} />
       </div>
     )
 
