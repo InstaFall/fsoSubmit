@@ -10,6 +10,15 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then(response => {
+        console.log("GET successful!", response.data)
+        setPersons(response.data)
+      })
+  }, [])
+
   const handleInputName = (event) => {
     setNewName(event.target.value)
   }
@@ -28,15 +37,17 @@ const App = () => {
     } else {
       const newPerson = {
         name: newName,
-        number: newNumber,
-        id: persons.length + 1
+        number: newNumber
       }
-      setNewName('')
-      setNewNumber('')
-      setPersons(persons.concat(newPerson))
+      
       axios
         .post("http://localhost:3001/persons", newPerson)
-        .then(response => console.log(response))
+        .then(response => {
+          console.log(response)
+          setNewName('')
+          setNewNumber('')
+          setPersons(persons.concat(response.data))
+        })
         .catch(err => console.log(err))
     }
   }
@@ -45,17 +56,8 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        console.log("GET successful!", response.data)
-        setPersons(response.data)
-      })
-  },
-    [])
-
-  const peopleToDisplay = (newFilter !== '') ? persons.filter((el) => (el.name.toLowerCase().includes(newFilter.toLowerCase()))) : persons
+  const peopleToDisplay = newFilter !== '' ?
+  persons.filter((el) => (el.name.toLowerCase().includes(newFilter.toLowerCase()))) : persons
 
   return (
     <div>

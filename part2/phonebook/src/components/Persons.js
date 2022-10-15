@@ -1,27 +1,29 @@
 import axios from "axios"
 
 const Person = (props) => {
+    const {data, handleDelete} = props
     return (
-        <li>{props.name} {props.number} <button id={props.id} onClick={props.handleDelete}>delete</button></li>
+        <li>{data.name} {data.number} <button onClick={handleDelete}>delete</button></li>
     )
 }
 
 const Persons = (props) => {
     const { peopleToDisplay, setPersons, persons } = props
 
-    const handleDelete = (event) => {
-        const id = event.target.getAttribute("id")
-        //immutable solution without splice
-        const deletedPersons = [...persons.slice(0, id - 1), ...persons.slice(id)]
-        setPersons(deletedPersons)
+    const handleDelete = (id) => {
+
         axios.delete(`http://localhost:3001/persons/${id}`)
-            .then(response => console.log(response))
+            .then(response => {
+                console.log(response)
+                const deletedPersons = persons.filter((el) => el.id !== id)
+                setPersons(deletedPersons)
+            })
     }
 
     return (
         <ul>
             {peopleToDisplay.map(el =>
-                <Person key={el.id} id={el.id} name={el.name} number={el.number} handleDelete={handleDelete}
+                <Person key={el.id} data={el} handleDelete={() => handleDelete(el.id)}
                 />)}
         </ul>
     )
