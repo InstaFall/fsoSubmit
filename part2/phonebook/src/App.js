@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
-import axios from 'axios'
+import netService from "./services/persons"
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
+  const ref = useRef(null)
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        console.log("GET successful!", response.data)
-        setPersons(response.data)
+      netService.getAll()
+      .then((response) => {
+        setPersons(response)
       })
+      .catch((err) => console.log(err))
   }, [])
 
   const handleInputName = (event) => {
@@ -33,24 +33,22 @@ const App = () => {
       alert(`${newName} is already in the phonebook!`)
       setNewName('')
       setNewNumber('')
-      document.querySelector('input[name="name"]').focus()
+      //document.querySelector('input[name="name"]').focus() changed to useRef hook
+      ref.current.focus()
     } else {
       const newPerson = {
         name: newName,
         number: newNumber
       }
-      
-      axios
-        .post("http://localhost:3001/persons", newPerson)
-        .then(response => {
-          console.log(response)
+        netService.create(newPerson)
+        .then((response) => {
           setNewName('')
           setNewNumber('')
-          setPersons(persons.concat(response.data))
+          setPersons(persons.concat(response))
         })
-        .catch(err => console.log(err))
+        }
     }
-  }
+  
 
   const handleFilter = (event) => {
     setFilter(event.target.value)
@@ -65,7 +63,7 @@ const App = () => {
       <Filter handleFilter={handleFilter} newFilter={newFilter} />
 
       <h2>Add new entry</h2>
-      <PersonForm newName={newName} newNumber={newNumber} handleInputName={handleInputName} handleInputNumber={handleInputNumber}
+      <PersonForm ref={ref} newName={newName} newNumber={newNumber} handleInputName={handleInputName} handleInputNumber={handleInputNumber}
         handleSubmit={handleSubmit} />
 
       <h2>Numbers</h2>

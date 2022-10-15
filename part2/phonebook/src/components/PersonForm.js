@@ -1,10 +1,12 @@
-const PersonForm = (props) => {
-    const { newName, newNumber, handleInputName, handleInputNumber, handleSubmit } = props
+import React from "react"
+
+const PersonForm = (props, ref) => {
+    const { newName, newNumber, handleInputName, handleInputNumber, handleSubmit } = props 
 
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                name: <input type="text" name="name" value={newName} onChange={handleInputName} />
+                name: <input ref={ref} type="text" name="name" value={newName} onChange={handleInputName} />
             </div>
             <div>
                 number: <input type="tel" value={newNumber} onChange={handleInputNumber} />
@@ -16,4 +18,4 @@ const PersonForm = (props) => {
     )
 }
 
-export default PersonForm
+export default React.forwardRef(PersonForm)
