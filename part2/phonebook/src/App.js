@@ -12,7 +12,7 @@ const App = () => {
   const ref = useRef(null)
 
   useEffect(() => {
-      netService.getAll()
+    netService.getAll()
       .then((response) => {
         setPersons(response)
       })
@@ -25,6 +25,10 @@ const App = () => {
 
   const handleInputNumber = (event) => {
     setNewNumber(event.target.value)
+  }
+
+  const handleFilter = (event) => {
+    setFilter(event.target.value)
   }
 
   const handleSubmit = (event) => {
@@ -40,22 +44,28 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-        netService.create(newPerson)
+      netService.create(newPerson)
         .then((response) => {
           setNewName('')
           setNewNumber('')
           setPersons(persons.concat(response))
         })
-        }
     }
-  
+  }
 
-  const handleFilter = (event) => {
-    setFilter(event.target.value)
+  const handleDelete = (id) => {
+    if (window.confirm(`Do you want to delete ${persons.find((el) => el.id == id).name}`)) {
+      netService.deleteObject(id)
+        .then((response) => {
+          const deletedPersons = persons.filter((el) => el.id !== id)
+          setPersons(deletedPersons)
+          console.log("Delete response: ", response)
+        })
+    }
   }
 
   const peopleToDisplay = newFilter !== '' ?
-  persons.filter((el) => (el.name.toLowerCase().includes(newFilter.toLowerCase()))) : persons
+    persons.filter((el) => (el.name.toLowerCase().includes(newFilter.toLowerCase()))) : persons
 
   return (
     <div>
@@ -67,7 +77,7 @@ const App = () => {
         handleSubmit={handleSubmit} />
 
       <h2>Numbers</h2>
-      <Persons peopleToDisplay={peopleToDisplay} persons={persons} setPersons={setPersons} />
+      <Persons peopleToDisplay={peopleToDisplay} handleDelete={handleDelete} />
     </div>
   )
 }

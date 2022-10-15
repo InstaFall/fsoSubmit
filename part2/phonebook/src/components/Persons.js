@@ -1,4 +1,4 @@
-import axios from "axios"
+import netService from "../services/persons"
 
 const Person = (props) => {
     const {data, handleDelete} = props
@@ -8,17 +8,7 @@ const Person = (props) => {
 }
 
 const Persons = (props) => {
-    const { peopleToDisplay, setPersons, persons } = props
-
-    const handleDelete = (id) => {
-
-        axios.delete(`http://localhost:3001/persons/${id}`)
-            .then(response => {
-                console.log(response)
-                const deletedPersons = persons.filter((el) => el.id !== id)
-                setPersons(deletedPersons)
-            })
-    }
+    const { peopleToDisplay, handleDelete } = props
 
     return (
         <ul>

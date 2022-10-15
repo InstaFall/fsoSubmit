@@ -20,10 +20,12 @@ const create = (newObject) => {
 
 const update = (updatedObject, id) => {
     const request = axios.put(`${baseUrl}/${id}`,updatedObject)
-    return request.then((response) => {
-        console.log(response)
-        return response.data
-    })
+    return request.then((response) => response.data)
 }
 
-export default {getAll, create, update}
+const deleteObject = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`)
+    return request.then((response) => response.status) //delete method returns an empty object so just return status
+} 
+
+export default {getAll, create, update, deleteObject}
