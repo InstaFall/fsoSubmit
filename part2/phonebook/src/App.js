@@ -9,7 +9,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
-  const ref = useRef(null)
+  const ref = useRef([])
 
   useEffect(() => {
     netService.getAll()
@@ -34,11 +34,24 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     if (persons.some(e => e.name.toLowerCase() === newName.toLowerCase())) {
-      alert(`${newName} is already in the phonebook!`)
-      setNewName('')
+      const id = persons.find((e) => e.name.toLowerCase() === newName.toLowerCase()).id
+      if(window.confirm(`${newName} is already in the phonebook. Do you want to update its phone number with ${newNumber}?`)){
+          const updatedPerson = {
+            name: newName,
+            number: newNumber,
+            id: id
+          }
+          netService.update(updatedPerson,id)
+          .catch((err) => {console.log(err)})
+          // For speed, re-render immediately instead of waiting for the response 
+          setPersons(persons.map((el) => el.id !== id ? el : updatedPerson))
+          setNewName('')
+          setNewNumber('')
+          ref.current[0].focus()}
+      else {
       setNewNumber('')
-      //document.querySelector('input[name="name"]').focus() changed to useRef hook
-      ref.current.focus()
+      ref.current[1].focus()
+      }
     } else {
       const newPerson = {
         name: newName,
@@ -49,16 +62,19 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setPersons(persons.concat(response))
+          ref.current[0].focus()
         })
+        .catch((err) => {console.log(err)})
     }
   }
 
   const handleDelete = (id) => {
-    if (window.confirm(`Do you want to delete ${persons.find((el) => el.id == id).name}`)) {
+    if (window.confirm(`Do you want to delete ${persons.find((el) => el.id === id).name}`)) {
       netService.deleteObject(id)
         .then((response) => {
           const deletedPersons = persons.filter((el) => el.id !== id)
           setPersons(deletedPersons)
+          ref.current[0].focus()
           console.log("Delete response: ", response)
         })
     }

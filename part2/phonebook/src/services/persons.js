@@ -25,7 +25,7 @@ const update = (updatedObject, id) => {
 
 const deleteObject = (id) => {
     const request = axios.delete(`${baseUrl}/${id}`)
-    return request.then((response) => response.status) //delete method returns an empty object so just return status
+    return request.then((response) => response.status) //delete method returns an empty object so just return the status
 } 
 
 export default {getAll, create, update, deleteObject}

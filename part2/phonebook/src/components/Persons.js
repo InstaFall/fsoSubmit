@@ -1,5 +1,3 @@
-import netService from "../services/persons"
-
 const Person = (props) => {
     const {data, handleDelete} = props
     return (
