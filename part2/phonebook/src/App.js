@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import netService from "./services/persons"
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
+  const [notification, setNotification] = useState(null)
   const ref = useRef([])
 
   useEffect(() => {
@@ -47,6 +49,10 @@ const App = () => {
           setPersons(persons.map((el) => el.id !== id ? el : updatedPerson))
           setNewName('')
           setNewNumber('')
+          setNotification(`${updatedPerson.name}'s number is changed to ${updatedPerson.number}!`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
           ref.current[0].focus()}
       else {
       setNewNumber('')
@@ -62,6 +68,10 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setPersons(persons.concat(response))
+          setNotification(`${newPerson.name} is added to the phonebook!`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
           ref.current[0].focus()
         })
         .catch((err) => {console.log(err)})
@@ -85,7 +95,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={notification} />
       <Filter handleFilter={handleFilter} newFilter={newFilter} />
 
       <h2>Add new entry</h2>
