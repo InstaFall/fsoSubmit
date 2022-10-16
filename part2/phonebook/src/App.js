@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
-  const [notification, setNotification] = useState(null)
+  const [notification, setNotification] = useState({message: null, error: false})
   const ref = useRef([])
 
   useEffect(() => {
@@ -37,26 +37,39 @@ const App = () => {
     event.preventDefault()
     if (persons.some(e => e.name.toLowerCase() === newName.toLowerCase())) {
       const id = persons.find((e) => e.name.toLowerCase() === newName.toLowerCase()).id
-      if(window.confirm(`${newName} is already in the phonebook. Do you want to update its phone number with ${newNumber}?`)){
-          const updatedPerson = {
-            name: newName,
-            number: newNumber,
-            id: id
-          }
-          netService.update(updatedPerson,id)
-          .catch((err) => {console.log(err)})
-          // For speed, re-render immediately instead of waiting for the response 
-          setPersons(persons.map((el) => el.id !== id ? el : updatedPerson))
-          setNewName('')
-          setNewNumber('')
-          setNotification(`${updatedPerson.name}'s number is changed to ${updatedPerson.number}!`)
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
-          ref.current[0].focus()}
+      const updatedPerson = {
+        name: newName,
+        number: newNumber,
+        id: id
+      }
+      if (window.confirm(`${newName} is already in the phonebook. Do you want to update its phone number with ${newNumber}?`)) {
+        netService.update(updatedPerson, id)
+          .then(() => {
+            setPersons(persons.map((el) => el.id !== id ? el : updatedPerson))
+            setNewName('')
+            setNewNumber('')
+            setNotification({...notification, message: `${updatedPerson.name}'s number is changed to ${updatedPerson.number}!`})
+            setTimeout(() => {
+              setNotification({message:null,error:false})
+            }, 5000)
+            ref.current[0].focus()
+          })
+          .catch((err) => {
+            console.log(err)
+            setNotification({message:`Error: Person was removed from the server! ${err}`, error: true})
+            setTimeout(() => {
+              setNotification({message:null,error:false})
+            }, 5000)
+            setPersons(persons.filter((el) => el.id !== id))
+            setNewName('')
+            setNewNumber('')
+            ref.current[0].focus()
+          })
+      }
+      // For speed, re-render immediately instead of waiting for the response 
       else {
-      setNewNumber('')
-      ref.current[1].focus()
+        setNewNumber('')
+        ref.current[1].focus()
       }
     } else {
       const newPerson = {
@@ -68,13 +81,13 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setPersons(persons.concat(response))
-          setNotification(`${newPerson.name} is added to the phonebook!`)
+          setNotification({...notification, message:`${newPerson.name} is added to the phonebook!`})
           setTimeout(() => {
-            setNotification(null)
-          }, 5000)
+            setNotification({message:null,error:false})
+          }, 4000)
           ref.current[0].focus()
         })
-        .catch((err) => {console.log(err)})
+        .catch((err) => { console.log(err) })
     }
   }
 
@@ -96,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={notification} />
+      <Notification notification={notification}/>
       <Filter handleFilter={handleFilter} newFilter={newFilter} />
 
       <h2>Add new entry</h2>
